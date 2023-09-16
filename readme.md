@@ -1,7 +1,9 @@
 Building an Autocorrect Feature using NLP with Python.
-December 4, 2021
+
 Topics:
+
 Machine Learning
+
 One of the features that use Natural Language Processing (NLP) is the Autocorrect function. This feature works on every smartphone keyboard regardless of the brand.
 
 It is specially programmed to generalize all the correct words in the dictionary and looks for the words that are the most comparable to those words not in the vocabulary.
