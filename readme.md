@@ -86,7 +86,7 @@ print(f"The dictionary has {len(v)} words.")
 ### Frequency and Probability of Dictionary Words
 Now, let's find the frequency of words in our dictionary and calculate their probabilities.
 
-```
+```bash
 # A function to get word frequencies
 def get_count(words):
     word_count_dict = {}
@@ -100,7 +100,7 @@ def get_count(words):
 word_count_dict = get_count(w)
 print(f"There are {len(word_count_dict)} key-value pairs.")
 ```
-```
+```bash
 # A function to calculate word probabilities
 def get_probs(word_count_dict):
     probs = {}
@@ -112,7 +112,7 @@ def get_probs(word_count_dict):
 ### Implementing Edit Word Functions
 We need to implement edit functions for delete, switch, replace, and insert operations.
 
-```
+```bash
 # Function to delete a letter from a word
 def DeleteLetter(word):
     # Implementation...
@@ -131,7 +131,7 @@ def insert_letter(word):
 ```
 We also combine these edit functions to perform autocorrect operations:
 
-```
+```bash
 # Function to perform one edit operation on a word
 def edit_one_letter(word, allow_switches=True):
     # Implementation...
