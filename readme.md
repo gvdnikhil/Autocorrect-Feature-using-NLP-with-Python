@@ -1,132 +1,93 @@
-Building an Autocorrect Feature using NLP with Python.
+# Autocorrect Feature Using NLP with Python
 
-Topics:
+## Table of Contents
 
-Machine Learning
+- [Introduction](#introduction)
+- [Prerequisites](#prerequisites)
+- [Natural Language Processing (NLP)](#natural-language-processing-nlp)
+- [Autocorrect Feature](#autocorrect-feature)
+- [Building Autocorrect Feature](#building-autocorrect-feature)
+  - [Installing Libraries](#installing-libraries)
+  - [Reading Text File (Dictionary)](#reading-text-file-dictionary)
+  - [Frequency and Probability of Dictionary Words](#frequency-and-probability-of-dictionary-words)
+  - [Implementing Edit Word Functions](#implementing-edit-word-functions)
+- [Conclusion](#conclusion)
 
-One of the features that use Natural Language Processing (NLP) is the Autocorrect function. This feature works on every smartphone keyboard regardless of the brand.
+## Introduction
 
-It is specially programmed to generalize all the correct words in the dictionary and looks for the words that are the most comparable to those words not in the vocabulary.
+One of the features that utilize Natural Language Processing (NLP) is the Autocorrect function. This feature is commonly found on smartphone keyboards and is programmed to correct spelling errors and suggest the most similar words when a word is not found in the dictionary. In this guide, we'll explore NLP and use Python to build an autocorrect feature.
 
-To understand how it works, we will learn a little about Natural Language Processing in this article and then we will use Python to build the autocorrect feature.
+## Prerequisites
 
-Table of contents
-Prerequisites
-Natural Language Processing (NLP)
-Autocorrect feature
-Building autocorrect feature
-Installing libraries
-Reading text file (dictionary)
-Frequency and probability of dictionary words
-Implement 4 edit word functions
-Conclusion
-Prerequisites
-To follow along with this tutorial, the reader should:
+To follow along with this tutorial, you should:
 
-Have a prior understanding of the basics of Natural Language Processing and Machine Learning concepts.
-Have a basic understanding of Python and the various python libraries used for Natural language processing.
-Know how to use Pycharm or any other IDE for working with Python.
-To download and install the Pycharm IDE on your PC, go to this website.
+- Have a basic understanding of Natural Language Processing (NLP) and Machine Learning concepts.
+- Be familiar with Python and the Python libraries commonly used for NLP.
+- Use an integrated development environment (IDE) like PyCharm or any other Python IDE.
 
-Natural Language Processing (NLP)
-Natural Language Processing (NLP) is a branch of Artificial Intelligence that allows computers to understand and process natural human language.
+## Natural Language Processing (NLP)
 
-NLP uses a programming language that enables computers to evaluate and interpret large volumes of natural language data.
+Natural Language Processing (NLP) is a branch of Artificial Intelligence that enables computers to understand and process natural human language. NLP has a wide range of applications, including:
 
-It paves the door for more interactivity and productivity in a variety of fields, like:
+- Search autocorrect and autocomplete.
+- Language translation and grammar checkers.
+- Chatbots and social media monitoring.
+- Email filtering and voice assistants.
 
-Search autocorrect and autocomplete.
-Language translation and grammar checkers.
-Chatbots and social media monitoring.
-Email filtering and voice assistants.
-We’ll look at how it’s employed in auto-correction systems in this tutorial.
+In this tutorial, we will focus on how NLP is used in autocorrection systems.
 
-Autocorrect feature
-The Autocorrect model is programmed to correct spellings and errors while inputting text and locating the most comparable related words.
+## Autocorrect Feature
 
-It is completely based on NLP that compares the words in the vocabulary dictionary and the typed words on the keyboard.
+The Autocorrect feature is designed to correct spelling errors and suggest similar words while typing. It relies on NLP to compare typed words with those in its vocabulary dictionary. Here are the key steps involved in building an autocorrect feature:
 
-If the typed word is found in the dictionary, the autocorrect feature assumes you typed the correct term. If the word does not exist, the tool identifies the most comparable words in our smartphone’s history, as it indicates.
+1. Identifying misspelled words.
+2. Finding words that are a certain edit distance away from the misspelled word (insert, delete, swap, replace).
+3. Filtering suggested candidates to include only correctly spelled words.
+4. Ordering filtered candidates based on word probabilities.
+5. Choosing the most likely candidate based on probabilities.
 
-When building this model/feature, the following steps are involved:
+## Building Autocorrect Feature
 
-Identifying misspelled word
-A word is misspelled if the text is not found on the vocabulary of the corpus (dictionary), then the autocorrect system flags out for correction.
+To build an autocorrect system, we'll start by using a vocabulary dictionary from a text file. Let's go through the steps.
 
-Find strings that are N-edit-distance away from the misspelled word
-Editing is an operation performed on the string to change it to another string.
+### Installing Libraries
 
-The n represents the edit distance like 1, 2, 3, so on, which keeps track of the number of edit operations to be done.
+To begin, install the required Python libraries using the following commands:
 
-Hence, the edit distance is the count of the number of operations performed on a word to edit it.
-
-The following are examples of edits:
-
-INSERT - a letter should be added.
-DELETE - removes a letter.
-SWAP - swaps two adjacent letters.
-REPLACE - changes one letter to another.
-NOTE: For autocorrect systems, n is usually between 1 and 3 edits.
-
-Filtering suggested candidates
-Only correctly spelled words from the created candidate list are considered, so that we can compare them to the words in the corpus to filter out the ones that don’t exist.
-
-Order filtered candidates based on word probabilities
-The probabilities of the words are calculated based on the following formula:
-
-P(w) = C(w)/V
-
-P(w)- the probability of a word w.
-C(w) - number of times (frequency) word appears in the vocabulary dictionary.
-V - the total sum of words in the dictionary.
-Choose the most-likely candidate
-When the probabilities are calculated, the actual list of words is grouped by the most likely word from the created candidates.
-
-Building autocorrect feature
-We will need a dictionary to develop an autocorrect system where the smartphone uses history to match the typed words to see if they are correct or not.
-
-For this tutorial, we will use a sample.txt file found in the project folder containing the 1000 most used vocabularies.
-
-Installing libraries
-We start by installing all the libraries general to machine learning using the pip command from the terminal.
-
+```bash
 pip install pattern
 pip install pyspellchecker
 pip install autocorrect
 pip install textblob
 pip install textdistance
-Reading text file (dictionary)
-We import all the necessary libraries and packages to read the text file containing a vocabulary dictionary:
+```
+### Reading Text File (Dictionary)
+We need a vocabulary dictionary to develop our autocorrect system. In this tutorial, we'll use a sample.txt file containing the 1000 most commonly used words.
 
+python
+
+```bash
 # Step 1: Data Preprocessing
-import re  # regular expression
+import re
 from collections import Counter
 import numpy as np
 import pandas as pd
 
-# Implement the function process_data which
-# 1) Reads in a corpus
-# 2) Changes everything to lowercase
-# 3) Returns a list of words.
-
-w = [] #words
-with open('sample.txt','r',encoding="utf8") as f:
+w = []  # Words
+with open('sample.txt', 'r', encoding="utf8") as f:
     file_name_data = f.read()
     file_name_data = file_name_data.lower()
     w = re.findall('\w+', file_name_data)
 
-v = set(w) #vocabulary
+v = set(w)  # Vocabulary
 print(f"The first 10 words in our dictionary are: \n{w[0:10]}")
-print(f"The dictionary has {len(v)} words ")
-The number of unique words and the top 10 words from the dictionary is displayed as output:
+print(f"The dictionary has {len(v)} words.")
+```
+### Frequency and Probability of Dictionary Words
+Now, let's find the frequency of words in our dictionary and calculate their probabilities.
 
-The first 10 words in our dictionary are: 
-['a', 'ability', 'able', 'about', 'above', 'accept', 'according', 'account', 'across', 'act']
-The dictionary has 1001 words 
-Frequency and probability of dictionary words
-We use the get_count() to find the frequency of the words as shown below:
-
- # a get_count function that returns a dictionary of word versus frequency
+```
+# A function to get word frequencies
 def get_count(words):
     word_count_dict = {}
     for word in words:
@@ -135,157 +96,58 @@ def get_count(words):
         else:
             word_count_dict[word] = 1
     return word_count_dict
-word_count_dict = get_count(words)
-print(f"There are {len(word_count_dict)} key values pairs")
-The output shown below displays that there are 1001 key-value pairs:
 
-There are 1001 key values pairs.
-The probability is calculated that any word will appear if randomly selected from the dictionary of words using the get_probs() as shown in the code:
-
-# implement get_probs function
-# to calculate the probability that any word will appear if randomly selected from the dictionary
-
+word_count_dict = get_count(w)
+print(f"There are {len(word_count_dict)} key-value pairs.")
+```
+```
+# A function to calculate word probabilities
 def get_probs(word_count_dict):
     probs = {}
     m = sum(word_count_dict.values())
     for key in word_count_dict.keys():
         probs[key] = word_count_dict[key] / m
     return probs
-Implement 4 edit word functions
-Each of the four edit functions is implemented below, each performing different tasks as illustrated earlier.
+```
+### Implementing Edit Word Functions
+We need to implement edit functions for delete, switch, replace, and insert operations.
 
-# Now we implement 4 edit word functions
-
-# DeleteLetter:removes a letter from a given word
+```
+# Function to delete a letter from a word
 def DeleteLetter(word):
-    delete_list = []
-    split_list = []
-    for i in range(len(word)):
-        split_list.append((word[0:i], word[i:]))
-    for a, b in split_list:
-        delete_list.append(a + b[1:])
-    return delete_list
+    # Implementation...
 
-delete_word_l = DeleteLetter(word="cans")
-From the code above, we use the DeleteLetter function that removes a letter from a given word.
-
-The word is first split split_list=[] into its components - the left and the right. We then loop over the sequence of characters using a for loop.
-
-Then, we use the compress the list to return all the instances of words without the deleted letter stored in the delete_list array list.
-
-For example:
-
-print(DeleteLetter("trash"))
-The output:
-
-['rash', 'tash', 'trsh', 'trah', 'tras']
-# SwitchLetter:swap two adjacent letters
+# Function to swap two adjacent letters in a word
 def SwitchLetter(word):
-    split_l = []
-    switch_l = []
-    for i in range(len(word)):
-        split_l.append((word[0:i], word[i:]))
-    switch_l = [a + b[1] + b[0] + b[2:] for a, b in split_l if len(b) >= 2]
-    return switch_l
+    # Implementation...
 
-switch_word_l = SwitchLetter(word="eta")
-The SwitchLetter function take a word, splits, and swaps all the letters in that word from left to right using switch_1.
-
-For example:
-
-print(SwitchLetter("trash"))
-The output:
-
-['rtash', 'tarsh', 'trsah', 'trahs']
-# replace_letter: changes one letter to another
+# Function to replace one letter with another in a word
 def replace_letter(word):
-    split_l = []
-    replace_list = []
-    for i in range(len(word)):
-        split_l.append((word[0:i], word[i:]))
-    alphabets = 'abcdefghijklmnopqrstuvwxyz'
-    replace_list = [a + l + (b[1:] if len(b) > 1 else '') for a, b in split_l if b for l in alphabets]
-    return replace_list
+    # Implementation...
 
-replace_l = replace_letter(word='can')
-The replace_letter function takes in a word and loops through all the characters of the English alphabet and swaps the first letter with the English alphabet.
-
-For example:
-
-print(replace_letter("trash"))
-The output:
-
-['arash', 'brash', 'crash', 'drash', 'erash', 'frash', 'grash', 'hrash', 'irash', ...]
-# insert_letter: adds additional characters
+# Function to insert an additional character into a word
 def insert_letter(word):
-    split_l = []
-    insert_list = []
-    for i in range(len(word) + 1):
-        split_l.append((word[0:i], word[i:]))
-    letters = 'abcdefghijklmnopqrstuvwxyz'
-    insert_list = [a + l + b for a, b in split_l for l in letters]
-    # print(split_l)
-    return insert_list
-The insert_letter function takes in a word, and for every character of the English alphabet, it is going to append the right component to the left component.
+    # Implementation...
+```
+We also combine these edit functions to perform autocorrect operations:
 
-For example:
-
-print(insert("trash"))
-['atrash', 'btrash', 'ctrash', 'dtrash', 'etrash', 'ftrash', 'gtrash', 'htrash', 'itrash', 'jtrash', 'ktrash', 'ltrash', 'mtrash', 'ntrash', 'otrash', 'ptrash', 'qtrash', 'rtrash', ...]
-NOTE: All the four edit functions use the split method for every word.
-
-We then combine these edit functions to allow the autocorrect features, like delete, replace, insert, and swap the letters.
-
-# combining the edits
-# switch operation optional
+```
+# Function to perform one edit operation on a word
 def edit_one_letter(word, allow_switches=True):
-    edit_set1 = set()
-    edit_set1.update(DeleteLetter(word))
-    if allow_switches:
-        edit_set1.update(SwitchLetter(word))
-    edit_set1.update(replace_letter(word))
-    edit_set1.update(insert_letter(word))
-    return edit_set1
+    # Implementation...
 
-# edit two letters
+# Function to perform two edit operations on a word
 def edit_two_letters(word, allow_switches=True):
-    edit_set2 = set()
-    edit_one = edit_one_letter(word, allow_switches=allow_switches)
-    for w in edit_one:
-        if w:
-            edit_two = edit_one_letter(w, allow_switches=allow_switches)
-            edit_set2.update(edit_two)
-    return edit_set2
+    # Implementation...
 
-# get corrected word
+# Function to get corrected word suggestions
 def get_corrections(word, probs, vocab, n=2):
-    suggested_word = []
-    best_suggestion = []
-    suggested_word = list(
-        (word in vocab and word) or edit_one_letter(word).intersection(vocab) or edit_two_letters(word).intersection(
-            vocab))
-    best_suggestion = [[s, probs[s]] for s in list(reversed(suggested_word))]
-    return best_suggestion
+    # Implementation...
+```
+In the end, the autocorrect system will prompt the user to input a word and provide suggestions based on the dictionary and probabilities.
 
-my_word = input("Enter any word:")
-probs = get_probs(word_count)
-tmp_corrections = get_corrections(my_word, probs, v, 2)
-for i, word_prob in enumerate(tmp_corrections):
-    print(f"word {i}: {word_prob[0]}, probability {word_prob[1]:.6f}")
-The program will prompt the user to input a word then will go through the dictionary and produce words similar to the input word.
+## Conclusion
+In this tutorial, we have explored how Natural Language Processing (NLP) is used to build an autocorrect feature in Python. NLP enables computers to understand and process human language, making autocorrection systems more efficient and user-friendly.
 
-For instance, when a user tries to type the word daed to mean dead. The autocorrect system produces a similar word dead with a probability of 0.000999.
 
-Autocorrect Output
-
-Conclusion
-As we have seen, NLP plays a crucial role in enabling computers to understand and process natural human language. This is as implemented above using the autocorrect system.
-
-You can find the full working code here.
-
-To summarize, we have:
-
-Learned what Natural Language Processing is and its ability to autocorrect words.
-Explored the autocorrect system and the various steps taken to build it.
-Implemented an autocorrect system using NLP with Python.
-Happy coding.
+Happy coding!
